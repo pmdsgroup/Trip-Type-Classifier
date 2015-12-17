@@ -3,18 +3,18 @@ import csv
 import pandas as pd
 
 conn = sqlite3.connect('Walmart_Train.db') 
-c = conn.cursor()
+c = conn.cursor()                                                     # Connection to the newly create SQlite3 database
 
 original_train = open('raw_train.csv', 'r')
-original_test = open('raw_test.csv', 'r')
+original_test = open('raw_test.csv', 'r')                             # Open raw data files
 
-df_train = pd.read_csv(original_train, keep_default_na=True, error_bad_lines=False).dropna()
-df_test = pd.read_csv(original_test, keep_default_na=True, error_bad_lines=False).dropna()
+df_train = pd.read_csv(original_train, keep_default_na=True, error_bad_lines=False).dropna()   #Clean raw data files using pandas dataframes. Drops rows with null values
+df_test = pd.read_csv(original_test, keep_default_na=True, error_bad_lines=False).dropna()    
 
-df_train.to_sql('Train', conn, if_exists='append', index=False)
+df_train.to_sql('Train', conn, if_exists='append', index=False)                                #Imports the clean pandas dataframes into the database
 df_test.to_sql('Test', conn, if_exists='append', index=False)
 
-departments = ["FINANCIAL SERVICES",
+departments = ["FINANCIAL SERVICES",                                                          #List of Walmart department names
                 "SHOES",
                 "PERSONAL CARE",
                 "PAINT AND 2",
@@ -84,20 +84,20 @@ departments = ["FINANCIAL SERVICES",
                 "HEALTH AND BEAUTY AIDS",
                 "PAINT AND ACCESSORIES"]
 
-num1 = range(1, 8)
+num1 = range(1, 8)                                                                      #Numbers to encode days of the week as integers instead
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-for x, y in zip(num1, days):
+for x, y in zip(num1, days):                                                            #Replaces days of the week with numbers in database
     c.execute('UPDATE TRAIN SET Weekday = ? WHERE Weekday = ?', (x, y))
     c.execute('UPDATE TEST SET Weekday = ? WHERE Weekday = ?', (x, y))
     conn.commit()
 
 num2 = range(1, 70)
-for x, y in zip(num2, departments):
+for x, y in zip(num2, departments):                                                     #Replaces department with encoded number in database
     c.execute('UPDATE TRAIN SET DepartmentDescription = ? WHERE DepartmentDescription = ?', (x, y))
     c.execute('UPDATE TEST SET DepartmentDescription = ? WHERE DepartmentDescription = ?', (x, y))
     conn.commit()
 
-with open('train_ml.csv', 'w') as f:
+with open('train_ml.csv', 'w') as f:                                                    #Export a cleaned .csv data file from the database
     train = c.execute('SELECT * FROM Train')
     writer = csv.writer(f)
     writer.writerow(['TripType', 'VisitNumber', 'Weekday', 'Upc', 'ScanCount', 'DepartmentDescription', 'FinelineNumber'])
