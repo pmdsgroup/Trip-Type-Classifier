@@ -2,12 +2,11 @@ import sqlite3
 import csv
 import pandas as pd
 
-conn = sqlite3.connect('/Users/theendless219/Walmart_Train2.db')
-
+conn = sqlite3.connect('Walmart_Train.db') 
 c = conn.cursor()
 
-original_train = open('/Users/theendless219/Desktop/train1.csv', 'r')
-original_test = open('/Users/theendless219/Desktop/test1.csv', 'r')
+original_train = open('raw_train.csv', 'r')
+original_test = open('raw_test.csv', 'r')
 
 df_train = pd.read_csv(original_train, keep_default_na=True, error_bad_lines=False).dropna()
 df_test = pd.read_csv(original_test, keep_default_na=True, error_bad_lines=False).dropna()
@@ -85,7 +84,6 @@ departments = ["FINANCIAL SERVICES",
                 "HEALTH AND BEAUTY AIDS",
                 "PAINT AND ACCESSORIES"]
 
-
 num1 = range(1, 8)
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 for x, y in zip(num1, days):
@@ -113,7 +111,6 @@ with open('test_ml.csv', 'w') as f1:
 
 original_test.close()
 original_train.close()
-
 
 
 
