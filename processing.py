@@ -1,8 +1,6 @@
 import numpy as np
 from sklearn import *
 
-####Somehow think of a way to create a class and inheritance
-
 
 def format_train(array):
     normalized_array = preprocessing.normalize(array)
@@ -29,4 +27,36 @@ def format_standard(array):
     scaler.fit(array)
     array = scaler.transform(array)
     return array
+
+
+class Trip:
+
+    def __init__(self, predictarr):
+        self.predictarr = predictarr
+
+    def get_predicted(self):
+        return self.predictarr
+
+    def distinct(self):
+        distinct_trip = set(self.predictarr)
+        return distinct_trip
+
+
+class Alter(Trip):
+
+    def __init__(self, predictarr):
+        Trip.__init__(self, predictarr)
+        self.stack = set(predictarr)
+
+    def pop(self):
+        self.stack.pop()
+        return self.stack
+
+    def add(self, value):
+        predict_list = list(self.stack)
+        appended = predict_list.append(value)
+        return appended
+
+    
+
 
