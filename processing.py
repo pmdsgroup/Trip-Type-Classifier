@@ -34,6 +34,7 @@ def format_standard(array):
 
 class Trip:
     """Input the predicted labels from the SGD Classifier. Get the whole array or return a set of distinct labels from the array"""
+
     def __init__(self, predictarr):
         self.predictarr = predictarr
 
@@ -47,6 +48,7 @@ class Trip:
 
 class Alter(Trip):
     """Inherited class from Trip that makes the distinct labels array a stack. Pop values from the stack or append a value to the stack."""
+
     def __init__(self, predictarr):
         Trip.__init__(self, predictarr)
         self.stack = set(predictarr)
@@ -59,7 +61,3 @@ class Alter(Trip):
         predict_list = list(self.stack)
         appended = predict_list.append(value)
         return appended
-
-    
-
-
